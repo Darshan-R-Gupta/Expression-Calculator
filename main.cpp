@@ -1,4 +1,5 @@
 #include <iostream>
+#include <math.h>
 #include "List.h"
 using namespace std;
 
@@ -56,31 +57,67 @@ class Operator{
 public:
     char op;
     char ass;
-    int precedence;
+    int in_precedence;
+    int out_precedence;
     Operator(char o = '\0'){
         op = o;
         if(o == '+'||o== '-'){
             ass = 'L';
-            precedence = 1;
+            in_precedence = 2;
+            out_precedence = 1;
         }
         else if(o == '*' || o == '/'){
             ass = 'L';
-            precedence = 2;
+            in_precedence = 4;
+            out_precedence = 3;
+        }
+        else if(o == '^'){
+            ass = 'R';
+            in_precedence = 5;
+            out_precedence = 6;
+        }
+        else if(o == '('){
+            ass = 'L';
+            in_precedence = 0;
+            out_precedence = 7;
+        }
+        else if(o == ')'){
+            ass= 'L';
+            in_precedence = -2;
+            out_precedence = 0;
         }
         else{
             ass = '\0';
-            precedence = -1;
+            in_precedence = -1;
+            out_precedence = -1;
         }
     }
     void assign(char o){
         op = o;
         if(o == '+'||o== '-'){
             ass = 'L';
-            precedence = 1;
+            in_precedence = 2;
+            out_precedence = 1;
         }
         else if(o == '*' || o == '/'){
             ass = 'L';
-            precedence = 2;
+            in_precedence = 4;
+            out_precedence = 3;
+        }
+        else if(o == '^'){
+            ass = 'R';
+            in_precedence = 5;
+            out_precedence = 6;
+        }
+        else if(o == '('){
+            ass = 'L';
+            in_precedence = 0;
+            out_precedence = 7;
+        }
+        else if(o == ')'){
+            ass= 'L';
+            in_precedence = -2;
+            out_precedence = 0;
         }
     }
 };
@@ -90,7 +127,7 @@ public:
     Operator *op;
     int size;
     ptable(){
-        char operators[] = {'+', '-','*','/' };
+        char operators[] = {'+', '-','*','/','^' };
         size = sizeof(operators);
         op = new Operator[size];
         for(int i= 0; i < size; ++i){
@@ -113,6 +150,7 @@ public:
         else if(o == op[1].op) value = x1 - x2;
         else if(o == op[2].op) value = x1 * x2;
         else if(o == op[3].op) value = x1 / x2;
+        else if(o == op[4].op) value = pow(x1,x2);
         return value;
     }
 };
@@ -179,7 +217,7 @@ public:
                 Operator top_op;
                 Operator curr = pt.get(exp[i]);
                 if(top != '(')     top_op = pt.get(top);
-                while(st.stack_top() != '(' && top_op.precedence >=  curr.precedence){
+                while(st.stack_top() != '(' && top_op.in_precedence >=  curr.out_precedence){
                     char ope = st.pop();
                     postfix.push_back(ope );
                     if(st.stack_top() == '(')  break;
@@ -251,7 +289,7 @@ int main(){
     char ans = 'n';
     do{
 
-        cout<<"Expression Calculator ( + - * / () ) \n";
+        cout<<"Expression Calculator ( + - * / () ^ ) \n";
         cout<<"Enter the expression: ";
         getline(cin, s);
         e.set(s);
