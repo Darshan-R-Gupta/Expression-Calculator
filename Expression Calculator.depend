@@ -1,0 +1,26 @@
+# depslib dependency file v1.0
+1592738807 source:e:\expression calculator\main.cpp
+	<iostream>
+	"List.h"
+
+1592722736 e:\expression calculator\include\list.h
+	<iostream>
+
+1592643220 source:e:\expression calculator\src\list.cpp
+	"List.h"
+	<iostream>
+
+1592722883 e:\expression calculator\stack.h
+	"List.h"
+
+1592722883 source:e:\expression calculator\stack.cpp
+	"Stack.h"
+	<iostream>
+
+1592723183 source:e:\expression calculator\src\stack.cpp
+	"Stack.h"
+	<iostream>
+
+1592737052 e:\expression calculator\include\stack.h
+	<List.h>
+
